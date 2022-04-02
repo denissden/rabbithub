@@ -10,4 +10,17 @@
     <PackageReference Include="rabbitmq.client" Version="6.2.4" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <PackageId>RabbitHub</PackageId>
+    <Authors>denissden</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Simple RabbitMQ client</Description>
+    <RepositoryUrl>https://github.com/denissden/rabbithub.git</RepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <LangVersion>latest</LangVersion>
+    <Tags>rabbitmq</Tags>
+  </PropertyGroup>
+
 </Project>
