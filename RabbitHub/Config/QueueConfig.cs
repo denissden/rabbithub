@@ -1,4 +1,4 @@
-namespace RabbitMQ.Hub.Config;
+namespace RabbitHub.Config;
 
 #nullable disable
 public class QueueConfig

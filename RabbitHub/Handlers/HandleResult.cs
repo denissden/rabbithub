@@ -1,4 +1,4 @@
-namespace RabbitMQ.Hub.Handlers;
+namespace RabbitHub.Handlers;
 
 public interface IHandleResult
 {

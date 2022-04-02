@@ -1,15 +1,15 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RabbitMQ.Hub.Config;
-using RabbitMQ.Hub.Extensions;
+using RabbitHub.Config;
+using RabbitHub.Extensions;
 
-namespace RabbitMQ.Hub;
+namespace RabbitHub;
 
-public partial class RabbitHub
+public partial class Hub
 {
-  public static RabbitHub Connect(ConnectionConfig connectionConfig)
+  public static Hub Connect(ConnectionConfig connectionConfig)
   {
-    var hub = new RabbitHub(connectionConfig);
+    var hub = new Hub(connectionConfig);
 
     var connFactory = new ConnectionFactory
     {

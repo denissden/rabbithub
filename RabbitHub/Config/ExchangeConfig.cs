@@ -1,4 +1,4 @@
-namespace RabbitMQ.Hub.Config;
+namespace RabbitHub.Config;
 public class ExchangeConfig
 {
   string Name { get; set; } = "";

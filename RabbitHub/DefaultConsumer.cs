@@ -1,7 +1,7 @@
 using RabbitMQ.Client;
-using RabbitMQ.Hub.Handlers;
+using RabbitHub.Handlers;
 
-namespace RabbitMQ.Hub;
+namespace RabbitHub;
 
 public partial class DefaultConsumer : AsyncDefaultBasicConsumer
 {

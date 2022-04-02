@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace RabbitMQ.Hub.Handlers;
+namespace RabbitHub.Handlers;
 public class LambdaHandler : IHandler, ILabmdaHandlerArgs
 {
   private Func<Message, ILabmdaHandlerArgs, Task<IHandleResult>>? _lambda;

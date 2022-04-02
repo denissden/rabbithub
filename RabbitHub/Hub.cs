@@ -1,12 +1,12 @@
 using System.Collections.Concurrent;
 using RabbitMQ.Client;
-using RabbitMQ.Hub.Config;
+using RabbitHub.Config;
 
-namespace RabbitMQ.Hub;
+namespace RabbitHub;
 
 
 public record DuplexModel(IModel Send, IModel Receive);
-public partial class RabbitHub
+public partial class Hub
 {
   public string AppId => connConf?.AppId ?? "";
   private ConnectionConfig connConf;
@@ -21,7 +21,7 @@ public partial class RabbitHub
   private ConcurrentDictionary<Guid, TaskCompletionSource<Message>> rpcWaitingCallback = new();
 
 #nullable disable
-  public RabbitHub(ConnectionConfig connectionConfig)
+  public Hub(ConnectionConfig connectionConfig)
   {
     connConf = connectionConfig;
   }

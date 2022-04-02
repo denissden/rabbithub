@@ -1,7 +1,7 @@
 
-using RabbitMQ.Hub.Handlers;
+using RabbitHub.Handlers;
 
-namespace RabbitMQ.Hub.Extensions;
+namespace RabbitHub.Extensions;
 
 public static class ConsumerExtensions
 {

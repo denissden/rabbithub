@@ -1,7 +1,7 @@
 using RabbitMQ.Client;
-using RabbitMQ.Hub.Config;
+using RabbitHub.Config;
 
-namespace RabbitMQ.Hub.Extensions;
+namespace RabbitHub.Extensions;
 public static class ModelExtensions
 {
   public static QueueDeclareOk QDeclare(this IModel channel, QueueConfig conf)

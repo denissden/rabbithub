@@ -1,12 +1,12 @@
 using System.Collections.Concurrent;
 using RabbitMQ.Client;
-using RabbitMQ.Hub.Config;
-using RabbitMQ.Hub.Extensions;
+using RabbitHub.Config;
+using RabbitHub.Extensions;
 
-namespace RabbitMQ.Hub;
-public partial class RabbitHub
+namespace RabbitHub;
+public partial class Hub
 {
-  public RabbitHub Consume(
+  public Hub Consume(
     DefaultConsumer consumer, QueueConfig queueConfig, 
     bool declareQueue = false, bool bindTopics = false)
   {

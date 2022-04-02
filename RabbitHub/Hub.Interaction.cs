@@ -1,13 +1,13 @@
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+using RabbitHub.Extensions;
 
-namespace RabbitMQ.Hub;
-public partial class RabbitHub
+namespace RabbitHub;
+public partial class Hub
 {
   public void Message(Message message, string topic)
   {
     var props = rpcChannel.Send.CreateBasicProperties();
-    message.FillBasicProps(props);
+    props.FillFromMessage(message);
     messageChannel.BasicPublish(
       exchange: connConf.Exchange,
       routingKey: message.Topic,

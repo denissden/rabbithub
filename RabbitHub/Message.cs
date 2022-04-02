@@ -3,7 +3,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text.Json;
 
-namespace RabbitMQ.Hub;
+namespace RabbitHub;
 
 public class Message
 {
@@ -88,12 +88,6 @@ public static class MessageExtensions
       args.BasicProperties,
       args.Body
     );
-  }
-
-  public static void FillBasicProps(this Message message, IBasicProperties props)
-  {
-    props.Headers = message.Headers;
-    props.CorrelationId = message.CorrelationId;
   }
 
   public static T? GetJsonContent<T>(this Message message)

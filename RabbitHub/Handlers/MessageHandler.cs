@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace RabbitMQ.Hub.Handlers;
+namespace RabbitHub.Handlers;
 public abstract class MessageHandler<TResult> : IHandler
 {
   public abstract Task<IHandleResult> Handle(Message message);

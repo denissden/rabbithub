@@ -1,6 +1,6 @@
-﻿using RabbitMQ.Hub;
-using RabbitMQ.Hub.Config;
-using RabbitMQ.Hub.Extensions;
+﻿using RabbitHub;
+using RabbitHub.Config;
+using RabbitHub.Extensions;
 
 public class Program
 {
@@ -15,7 +15,7 @@ public class Program
 
     var conf = ConnectionConfig.GetDefault("test");
 
-    var hub = RabbitHub.Connect(conf);
+    var hub = Hub.Connect(conf);
 
     var arg = args[0];
     if (arg == "send")
