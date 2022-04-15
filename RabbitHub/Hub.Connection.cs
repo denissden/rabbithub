@@ -42,15 +42,14 @@ public partial class Hub
     var callbackCons = new AsyncEventingBasicConsumer(rpcReceive);
     hub.rpcCallbackConsumer = callbackCons;
     rpcReceive.BasicConsume(callbackQueue, false, callbackCons);
-    // TODO: handlers
     callbackCons.Received += hub.OnRpcReceived;
-    
+
     #endregion
 
     #region qos
     rpcReceive.BasicQos(
-      prefetchSize: 0, 
-      prefetchCount: 10, 
+      prefetchSize: 0,
+      prefetchCount: connectionConfig.PrefetchCount,
       global: false);
     #endregion
 
@@ -61,7 +60,8 @@ public partial class Hub
   {
     var correlationId = Guid.Parse(args.BasicProperties.CorrelationId);
     bool found = rpcWaitingCallback.TryRemove(correlationId, out var tcs);
-    if (!found) {
+    if (!found)
+    {
       rpcChannel.Receive.BasicNack(args.DeliveryTag, false, false);
       return Task.CompletedTask;
     }
@@ -71,5 +71,10 @@ public partial class Hub
     rpcChannel.Receive.BasicAck(args.DeliveryTag, false);
 
     return Task.CompletedTask;
+  }
+
+  public void Close()
+  {
+    connection.Close();
   }
 }

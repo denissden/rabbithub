@@ -2,21 +2,23 @@ using System.Collections.Concurrent;
 using RabbitMQ.Client;
 using RabbitHub.Config;
 using RabbitHub.Extensions;
+using RabbitHub.Consumers;
 
 namespace RabbitHub;
 public partial class Hub
 {
-  public Hub Consume(
-    DefaultConsumer consumer, QueueConfig queueConfig, 
+  public Hub Consume<T>(
+    T consumer, QueueConfig queueConfig, 
     bool declareQueue = false, bool bindTopics = false)
+    where T: AsyncDefaultBasicConsumer, IConsumer
   {
     var channel = CreateChannel();
     consumer.Model = channel;
-    if (declareQueue) 
+    if (declareQueue || queueConfig.AutoDeclare) 
     {
       channel.QDeclare(queueConfig);
     }
-    if (bindTopics)
+    if (bindTopics || queueConfig.AutoBindTopics)
     {
       foreach (string topic in consumer.GetTopics())
       {

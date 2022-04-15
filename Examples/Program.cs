@@ -1,6 +1,7 @@
 ﻿using RabbitHub;
 using RabbitHub.Config;
 using RabbitHub.Extensions;
+using RabbitHub.Consumers;
 
 public class Program
 {

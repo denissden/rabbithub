@@ -8,15 +8,20 @@ public class ConnectionConfig
   public string Password { get; set; }
   public string Address { get; set; }
   public string Exchange { get; set; }
+  public string DefaultQueue { get; set; }
+  public ushort PrefetchCount { get; set; }
 
-  public static ConnectionConfig GetDefault(string appId) 
+  public static ConnectionConfig GetDefault(string appId)
   {
-    return new ConnectionConfig{
+    return new ConnectionConfig
+    {
       AppId = appId,
       Login = "guest",
       Password = "guest",
       Address = "localhost",
-      Exchange = "amq.direct"
+      Exchange = "amq.direct",
+      DefaultQueue = $"q_{appId}",
+      PrefetchCount = 100
     };
-  } 
+  }
 }

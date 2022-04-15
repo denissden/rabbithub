@@ -1,5 +1,5 @@
-
 using RabbitHub.Handlers;
+using RabbitHub.Consumers;
 
 namespace RabbitHub.Extensions;
 

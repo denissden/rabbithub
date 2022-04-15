@@ -1,17 +1,12 @@
-using RabbitMQ.Client;
 using RabbitHub.Handlers;
+using RabbitMQ.Client;
 
-namespace RabbitHub;
-
-public partial class DefaultConsumer : AsyncDefaultBasicConsumer
+namespace RabbitHub.Consumers;
+public abstract class AbstractConsumer : AsyncDefaultBasicConsumer, IConsumer
 {
-  private Dictionary<string, IHandler> _handlers = new();
-
   public override Task HandleBasicDeliver(string consumerTag, ulong deliveryTag, bool redelivered, string exchange, string routingKey, IBasicProperties properties, ReadOnlyMemory<byte> body)
   {
-    // TODO: try task.run()
     var task = HandleDeliver(consumerTag, deliveryTag, redelivered, exchange, routingKey, properties, body);
-    //Task.Run(async () => await task.ConfigureAwait(false));
     return Task.CompletedTask;
   }
 
@@ -48,10 +43,9 @@ public partial class DefaultConsumer : AsyncDefaultBasicConsumer
     }
   }
 
-  protected virtual IHandler? GetHandlerForTopic(string? topic)
-  {
-    return _handlers.TryGetValue(topic ?? "", out var handler) ? handler : null;
-  }
+  protected abstract IHandler? GetHandlerForTopic(string? topic);
+  
+  public abstract IEnumerable<string> GetTopics();
 
   protected void ProcessResult(IHandleResult result, ulong deliveryTag)
   {

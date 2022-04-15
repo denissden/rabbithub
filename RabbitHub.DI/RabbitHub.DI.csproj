@@ -1,21 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- <ItemGroup>
+    <ProjectReference Include="..\RabbitHub\RabbitHub.csproj" />
+  </ItemGroup> -->
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="microsoft.extensions.hosting" Version="6.0.1" />
+    <PackageReference Include="rabbithub" Version="0.2.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="rabbitmq.client" Version="6.2.4" />
-  </ItemGroup>
-
   <PropertyGroup>
     <Version>0.2.0</Version>
-    <PackageId>RabbitHub</PackageId>
+    <PackageId>RabbitHub.DI</PackageId>
     <Authors>denissden</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>Simple RabbitMQ client</Description>
+    <Description>RabbitHub Dependency Injection support</Description>
     <RepositoryUrl>https://github.com/denissden/rabbithub.git</RepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <IncludeSource>true</IncludeSource>
