@@ -12,10 +12,16 @@ var host = Host
   .CreateDefaultBuilder()
   .ConfigureServices((context, services) =>
   {
-    services.AddRabbitHub(conf, consumer => 
-      consumer
-        .HandleRpc<NumberRpcHandler>("test.number.rpc"),
-      queueConf
+    services.AddRabbitHub(hub => 
+      hub
+      .Connect(conf)
+      .UseDefaultConsumer(cons => 
+        cons
+        .Queue(queueConf)
+        .DeclareQueue()
+        .BindTopics()
+        .HandleRpc<NumberRpcHandler>("test.number.rpc")
+      )
     );
   });
 

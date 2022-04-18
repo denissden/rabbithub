@@ -10,22 +10,35 @@ public static class ServiceCollectionExtensions
 {
   public static IServiceCollection AddRabbitHub(
     this IServiceCollection services,
-    ConnectionConfig connectionConfig,
-    Action<HostConsumer.HostConsumerConfigurator> configureConsumer,
-    QueueConfig? queueConfig = null)
+    Action<RabbitHubConfig> configureRabbit)
   {
-    var hub = Hub.Connect(connectionConfig);
-    services.AddSingleton<Hub>(hub);
+    var rabbitConfig = new RabbitHubConfig();
+    configureRabbit(rabbitConfig);
+    rabbitConfig.Build(services);
 
-    var configurator = new HostConsumer.HostConsumerConfigurator(services);
-    configureConsumer(configurator);
-    queueConfig = queueConfig ?? QueueConfig.Create(connectionConfig.DefaultQueue);
-    configurator.QueueConfig = queueConfig;
-    services.AddSingleton(configurator);
-    services.AddSingleton<HostConsumer>();
+    services.AddSingleton<RabbitHubConfig>(rabbitConfig);
 
     services.AddHostedService<RabbitService>();
 
+    var rabbitHub = BuildHub(rabbitConfig);
+    services.AddSingleton(rabbitHub);
+
+    if (rabbitConfig.DefaultConsumerConfig is { } consConfig)
+    {
+      if (consConfig.QueueConfig is null)
+        throw new ArgumentException($"{nameof(QueueConfig)} was null");
+      services.AddSingleton<HostConsumer>();
+    }
+
     return services;
+  }
+
+  private static Hub BuildHub(RabbitHubConfig config)
+  {
+    var connConf = config.ConnectionConfig ??
+      throw new ArgumentException($"{nameof(ConnectionConfig)} was not specified");
+    var rabbitHub = Hub.Connect(connConf);
+
+    return rabbitHub;
   }
 }

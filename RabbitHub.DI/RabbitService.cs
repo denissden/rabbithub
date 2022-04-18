@@ -5,34 +5,44 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using RabbitHub.Config;
 using RabbitHub.Consumers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RabbitHub.DI;
 public class RabbitService : IHostedService
 {
-  private readonly Hub _rabbitHub;
-  private readonly HostConsumer.HostConsumerConfigurator _consumerConfigurator;
-  private readonly HostConsumer _consumer;
-
-  public RabbitService(
-    Hub rabbitHub,
-    HostConsumer.HostConsumerConfigurator consumerConfigurator,
-    HostConsumer consumer)
+  private readonly Hub _hub;
+  private readonly RabbitHubConfig _config;
+  private readonly IServiceProvider _serviceProvider;
+  public RabbitService(Hub hub, RabbitHubConfig config, IServiceProvider serviceProvider)
   {
-    _rabbitHub = rabbitHub;
-    _consumerConfigurator = consumerConfigurator;
-    _consumer = consumer;
+    _hub = hub;
+    _config = config;
+    _serviceProvider = serviceProvider;
   }
 
   public Task StartAsync(CancellationToken cancellationToken)
   {
-    _consumer.ApplyConfiguration(_consumerConfigurator);
-    _rabbitHub.Consume(_consumer, _consumerConfigurator.QueueConfig);
+    BuildHub();
     return Task.CompletedTask;
+  }
+
+  public void BuildHub()
+  {
+    if (_config.DefaultConsumerConfig is { } consConfig)
+    {
+      var cons = _serviceProvider.GetRequiredService<HostConsumer>();
+      cons.Build(consConfig);
+      _hub.Consume(
+        cons,
+        consConfig.QueueConfig!,
+        declareQueue: consConfig.DoDeclareQueue,
+        bindTopics: consConfig.DoBindTopics);
+    }
   }
 
   public Task StopAsync(CancellationToken cancellationToken)
   {
-    _rabbitHub.Close();
+
     return Task.CompletedTask;
   }
 }
