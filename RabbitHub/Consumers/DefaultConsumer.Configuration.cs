@@ -4,16 +4,16 @@ using RabbitHub.Config;
 
 namespace RabbitHub.Consumers;
 
-public partial class DefaultConsumer : IConsumerConfigurator
+public partial class DefaultConsumer
 {
-  public IConsumerConfigurator HandleMessage<T>(string topic) where T : class, IHandler
+  public DefaultConsumer HandleMessage<T>(string topic) where T : class, IHandler
   {
     var consumer = Activator.CreateInstance<T>();
     Handle(consumer, topic);
     return this;
   }
 
-  public IConsumerConfigurator HandleRpc<T>(string topic) where T : class, IHandler
+  public DefaultConsumer HandleRpc<T>(string topic) where T : class, IHandler
   {
     return HandleMessage<T>(topic);
   }
