@@ -33,7 +33,7 @@ public partial class Hub
     receiveConf.Exclusive = true;
     var callbackQueue = rpcReceive.QDeclare(receiveConf).QueueName;
     hub.callbackQueue = callbackQueue;
-    // TODO: bind
+
     rpcReceive.QueueBind(
       hub.callbackQueue,
       exchange: hub.connConf.Exchange,
@@ -43,7 +43,8 @@ public partial class Hub
     hub.rpcCallbackConsumer = callbackCons;
     rpcReceive.BasicConsume(callbackQueue, false, callbackCons);
     callbackCons.Received += hub.OnRpcReceived;
-
+    rpcSend.BasicNacks += hub.OnRpcNacks;
+    rpcSend.BasicReturn += hub.OnRpcReturn;
     #endregion
 
     #region qos
@@ -59,7 +60,8 @@ public partial class Hub
   private Task OnRpcReceived(object sender, BasicDeliverEventArgs args)
   {
     var correlationId = Guid.Parse(args.BasicProperties.CorrelationId);
-    bool found = rpcWaitingCallback.TryRemove(correlationId, out var tcs);
+    var key = new UlongAndGuid(0, correlationId);
+    bool found = rpcWaitingCallback.TryRemove(key, out var tcs);
     if (!found)
     {
       rpcChannel.Receive.BasicNack(args.DeliveryTag, false, false);
@@ -71,6 +73,27 @@ public partial class Hub
     rpcChannel.Receive.BasicAck(args.DeliveryTag, false);
 
     return Task.CompletedTask;
+  }
+
+  // handle rpc errors
+  private void OnRpcNacks(object? sender, BasicNackEventArgs args)
+  {
+    var key = new UlongAndGuid(args.DeliveryTag, Guid.Empty);
+    if (rpcWaitingCallback.TryRemove(key, out var tcs))
+    {
+      tcs.SetResult(null);
+    }
+  }
+
+  // message was unroutable
+  private void OnRpcReturn(object? sender, BasicReturnEventArgs args)
+  {
+    var correlationId = Guid.Parse(args.BasicProperties.CorrelationId);
+    var key = new UlongAndGuid(0, correlationId);
+    if (rpcWaitingCallback.TryRemove(key, out var tcs))
+    {
+      tcs.SetResult(null);
+    }
   }
 
   public void Close()

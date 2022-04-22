@@ -18,7 +18,15 @@ public partial class Hub
   private string callbackQueue;
   private string callbackTopic => callbackQueue + ".topic";
 
-  private ConcurrentDictionary<Guid, TaskCompletionSource<Message>> rpcWaitingCallback = new();
+  private ConcurrentDictionary<UlongAndGuid, TaskCompletionSource<Message?>> rpcWaitingCallback = new();
+
+  public record struct UlongAndGuid(ulong number, Guid guid) : IEquatable<UlongAndGuid>
+  {
+    public bool Equals(UlongAndGuid? other)
+    {
+      return other != null && (number == other.Value.number || guid == other.Value.guid);
+    }
+  }
 
 #nullable disable
   public Hub(ConnectionConfig connectionConfig)

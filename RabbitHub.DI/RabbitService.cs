@@ -42,7 +42,6 @@ public class RabbitService : IHostedService
 
   public Task StopAsync(CancellationToken cancellationToken)
   {
-
     return Task.CompletedTask;
   }
 }

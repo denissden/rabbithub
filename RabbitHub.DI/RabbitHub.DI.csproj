@@ -7,7 +7,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="microsoft.extensions.hosting" Version="6.0.1" />
-    <!-- <PackageReference Include="rabbithub" Version="0.2.0" /> -->
   </ItemGroup>
 
   <PropertyGroup>
@@ -17,10 +16,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <PackageId>RabbitHub.DI</PackageId>
     <Authors>denissden</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Readme>https://raw.githubusercontent.com/denissden/rabbithub/main/README.md</Readme>
     <Description>RabbitHub Dependency Injection support</Description>
     <RepositoryUrl>https://github.com/denissden/rabbithub.git</RepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>

@@ -9,7 +9,7 @@ public class RabbitHubConfig
 {
   public ConnectionConfig? ConnectionConfig;
   private Action<ConsumerConfig>? _defaultConsumerLambda;
-  public ConsumerConfig? DefaultConsumerConfig;
+  public ConsumerConfig DefaultConsumerConfig = new ConsumerConfig();
 
   public RabbitHubConfig Connect(ConnectionConfig config)
   {
@@ -25,10 +25,9 @@ public class RabbitHubConfig
 
   public void Build(IServiceCollection services)
   {
-    if (_defaultConsumerLambda is not null) {
-      var defaultConsumerConfig = new ConsumerConfig();
-      _defaultConsumerLambda(defaultConsumerConfig);
-      DefaultConsumerConfig = defaultConsumerConfig;
+    if (_defaultConsumerLambda is not null)
+    {
+      _defaultConsumerLambda(DefaultConsumerConfig);
       DefaultConsumerConfig.Build(services);
     }
   }
